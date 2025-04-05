@@ -1,0 +1,56 @@
+name: OnPsh
+
+on:
+  push:  # Trigger on push events
+
+jobs:
+  run-index:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write  # Grant write access to push changes
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # Fetch all history for Git operations
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'  # Replace with the Python version you need
+
+    - name: Cache Python dependencies
+      uses: actions/cache@v3
+      id: pip-cache
+      with:
+        path: ~/.cache/pip  # Path to cache for pip
+        key: pip-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
+        restore-keys: |
+          pip-${{ runner.os }}-
+
+    - name: Install Dependencies
+      run: |
+        if [ -f requirements.txt ]; then
+          pip install -r requirements.txt
+        else
+          echo "No requirements.txt found. Skipping dependency installation."
+        fi
+
+    - name: Run index.py
+      run: python index.py
+
+    - name: Commit and Push Changes
+      run: |
+        git config --global user.name "$GITHUB_EVENT_NAME"
+        git config --global user.email "udy15r@gmail.com"
+        if [ -n "$(git status --porcelain)" ]; then
+          git add .
+          # Get current time in IST (UTC+5:30)
+          IST_TIME=$(TZ="Asia/Kolkata" date +"%Y-%m-%d %H:%M:%S %Z")
+          git commit -m "$GITHUB_EVENT_NAME-$GITHUB_RUN_ID @ $IST_TIME"
+          git push
+        else
+          echo "No changes to commit."
+        fi
