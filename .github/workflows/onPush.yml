@@ -26,4 +26,4 @@ jobs:
         run: |
           # Example of starting Chrome in headless mode is built into your Selenium script,
           # so just run your test script here
-          python your_selenium_test_script.py
+          python index.py
