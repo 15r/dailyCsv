@@ -111,25 +111,25 @@ nseName = zipDate.strftime("%Y%m%d")
 sources = {
     "NSE Equities": {
         "source_url": "https://www.nseindia.com/all-reports",
-        "file_url": f"https://github.com/udaychandran/tst/blob/main/data/BhavCopy_NSE_CM_0_0_0_{nseName}_F_0000.csv.zip",
+        "file_url": f"https://15r.github.io/BhavCopy_NSE_CM_0_0_0_{nseName}_F_0000.csv.zip",
         "expected_files": [f"BhavCopy_NSE_CM_0_0_0_{nseName}_F_0000.csv"],
         "file_name": "nse.csv",
     },
     "NSE Derivatives": {
         "source_url": "https://www.nseindia.com/all-reports-derivatives",
-        "file_url": f"https://nsearchives.nseindia.com/content/fo/BhavCopy_NSE_FO_0_0_0_{nseName}_F_0000.csv.zip",
+        "file_url": f"https://15r.github.io/BhavCopy_NSE_FO_0_0_0_{nseName}_F_0000.csv.zip",
         "expected_files": [f"BhavCopy_NSE_FO_0_0_0_{nseName}_F_0000.csv"],
         "file_name": "nfo.csv",
     },
     "BSE Equities": {
         "source_url": "https://www.bseindia.com/markets/MarketInfo/BhavCopy.aspx",
-        "file_url": f"https://www.bseindia.com/download/BhavCopy/Equity/BhavCopy_BSE_CM_0_0_0_{nseName}_F_0000.csv",
+        "file_url": f"https://15r.github.io/BhavCopy_BSE_CM_0_0_0_{nseName}_F_0000.csv",
         "expected_files": [f"BhavCopy_BSE_CM_0_0_0_{nseName}_F_0000.csv"],
         "file_name": "bse.csv",
     },
     "ISIN": {
         "source_url": "https://www.nseindia.com/market-data/securities-available-for-trading",
-        "file_url": f"https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv",
+        "file_url": f"https://15r.github.io/EQUITY_L.csv",
         "expected_files": [f"EQUITY_L.csv"],
         "file_name": "isin.csv",
     },
