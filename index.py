@@ -111,7 +111,7 @@ nseName = zipDate.strftime("%Y%m%d")
 sources = {
     "NSE Equities": {
         "source_url": "https://www.nseindia.com/all-reports",
-        "file_url": f"https://nsearchives.nseindia.com/content/cm/BhavCopy_NSE_CM_0_0_0_{nseName}_F_0000.csv.zip",
+        "file_url": f"https://github.com/udaychandran/tst/blob/main/data/BhavCopy_NSE_CM_0_0_0_{nseName}_F_0000.csv.zip",
         "expected_files": [f"BhavCopy_NSE_CM_0_0_0_{nseName}_F_0000.csv"],
         "file_name": "nse.csv",
     },
