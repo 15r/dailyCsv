@@ -24,6 +24,4 @@ jobs:
         env:
           DISPLAY: :99
         run: |
-          # Example of starting Chrome in headless mode is built into your Selenium script,
-          # so just run your test script here
           python index.py
