@@ -43,14 +43,19 @@ jobs:
 
     - name: Commit and Push Changes
       run: |
-        git config --global user.name "15r"
+        set -e
+        if [ -f dates.json ]; then
+          rm dates.json
+          echo "dates.json deleted."
+        else
+          echo "dates.json does not exist. No action required."
+        fi
         git config --global user.email "udy15r@gmail.com"
-
+        git config --global user.name "15r"
         if [ -n "$(git status --porcelain)" ]; then
           git add .
-          # Get current time in IST (UTC+5:30)
-          IST_TIME=$(TZ="Asia/Kolkata" date +"%Y-%m-%d %H:%M:%S %Z")
-          git commit -m "$GITHUB_EVENT_NAME-$GITHUB_RUN_ID @ $IST_TIME"
+          git commit -m "$GITHUB_EVENT_NAME-$GITHUB_RUN_ID"
           git push
         else
           echo "No changes to commit."
+        fi
