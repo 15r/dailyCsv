@@ -43,7 +43,7 @@ jobs:
 
     - name: Commit and Push Changes
       run: |
-        git config --global user.name "udy15r"
+        git config --global user.name "15r"
         git config --global user.email "udy15r@gmail.com"
 
         if [ -n "$(git status --porcelain)" ]; then
