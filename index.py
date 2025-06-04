@@ -138,7 +138,7 @@ sources = {
     },
     "ISIN": {
         "source_url": "https://www.nseindia.com/market-data/securities-available-for-trading",
-        "file_url": f"https://nsearchives.nseindia.com/content/equities/EQUITY_L.csv",
+        "file_url": f"https://amzn-in.web.app/EQUITY_L.csv",
         "expected_files": [f"EQUITY_L.csv"],
         "file_name": "isin.csv",
     },
