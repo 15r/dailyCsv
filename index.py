@@ -1,5 +1,6 @@
 import requests
 from datetime import date, datetime, timedelta
+import pytz
 import os
 import logging
 import zipfile
@@ -74,7 +75,6 @@ def fetch_symbol_column(url):
             symbol_column = df['symbol']
             return symbol_column
 
-
 def find_latest_nse_date(start_date, max_retries=2):
     current_date = start_date
 
@@ -92,36 +92,46 @@ def find_latest_nse_date(start_date, max_retries=2):
         # Try previous day
         current_date -= timedelta(days=1)
 
-    # If we exhausted retries
     print("❌ NSE data not found within retry limit.")
     return None
 
+# Prepare session
 s = requests.Session()
 s.headers.update({'User-Agent': 'Mozilla/5.0'})
 
-login_url = "https://www.nseindia.com/market-data/live-equity-market"
-s.get(login_url)
+# Determine "effective yesterday" based on IST and 6 PM cutoff
+ist = pytz.timezone('Asia/Kolkata')
+now_ist = datetime.now(ist)
 
-# Start from yesterday
-yesterday = date.today()
-zipDate = find_latest_nse_date(yesterday, max_retries=5)
-nseName = zipDate.strftime("%Y%m%d")
+# If before 6:00 PM IST, consider yesterday as latest full trading day
+if now_ist.time() < datetime.strptime("18:00", "%H:%M").time():
+    effective_date = now_ist.date() - timedelta(days=1)
+else:
+    effective_date = now_ist.date()
+
+# Find the latest NSE date from effective_date
+zipDate = find_latest_nse_date(effective_date, max_retries=5)
+if zipDate:
+    nseName = zipDate.strftime("%Y%m%d")
+    print(nseName)
+else:
+    print("❌ Could not determine a valid NSE trading date.")
 
 sources = {
     "NSE Equities": {
-        "source_url": "https://www.nseindia.com/all-reports",
+        "source_url": f"https://nsearchives.nseindia.com/content/fo/BhavCopy_NSE_CM_0_0_0_{nseName}_F_0000.csv.zip",
         "file_url": f"https://amzn-in.web.app/BhavCopy_NSE_CM_0_0_0_{nseName}_F_0000.csv.zip",
         "expected_files": [f"BhavCopy_NSE_CM_0_0_0_{nseName}_F_0000.csv"],
         "file_name": "nse.csv",
     },
     "NSE Derivatives": {
-        "source_url": "https://www.nseindia.com/all-reports-derivatives",
+        "source_url": f"https://nsearchives.nseindia.com/content/fo/BhavCopy_NSE_FO_0_0_0_{nseName}_F_0000.csv.zip",
         "file_url": f"https://amzn-in.web.app/BhavCopy_NSE_FO_0_0_0_{nseName}_F_0000.csv.zip",
         "expected_files": [f"BhavCopy_NSE_FO_0_0_0_{nseName}_F_0000.csv"],
         "file_name": "nfo.csv",
     },
     "BSE Equities": {
-        "source_url": "https://www.bseindia.com/markets/MarketInfo/BhavCopy.aspx",
+        "source_url": f"https://www.bseindia.com/download/BhavCopy/Equity/BhavCopy_BSE_CM_0_0_0_{nseName}_F_0000.CSV",
         "file_url": f"https://amzn-in.web.app/BhavCopy_BSE_CM_0_0_0_{nseName}_F_0000.csv",
         "expected_files": [f"BhavCopy_BSE_CM_0_0_0_{nseName}_F_0000.csv"],
         "file_name": "bse.csv",
