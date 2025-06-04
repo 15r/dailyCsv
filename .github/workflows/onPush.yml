@@ -19,13 +19,13 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.x'  # Replace with the Python version you need
+        python-version: '3.x'
 
     - name: Cache Python dependencies
       uses: actions/cache@v3
       id: pip-cache
       with:
-        path: ~/.cache/pip  # Path to cache for pip
+        path: ~/.cache/pip
         key: pip-${{ runner.os }}-${{ hashFiles('requirements.txt') }}
         restore-keys: |
           pip-${{ runner.os }}-
@@ -44,7 +44,8 @@ jobs:
     - name: Commit and Push Changes
       run: |
         git config --global user.name "$GITHUB_EVENT_NAME"
-        git config --global user.email "udy15r@gmail.com"Add commentMore actions
+        git config --global user.email "udy15r@gmail.com"
+
         if [ -n "$(git status --porcelain)" ]; then
           git add .
           # Get current time in IST (UTC+5:30)
@@ -53,4 +54,3 @@ jobs:
           git push
         else
           echo "No changes to commit."
-        fi
